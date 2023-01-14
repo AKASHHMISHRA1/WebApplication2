@@ -8,29 +8,32 @@ namespace WebApplication2.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly UsersService _userService;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, UsersService userService)
         {
             _logger = logger;
+            _userService = userService;
         }
-        private MongoClient client = new MongoClient("mongodb://127.0.0.1:27017/");
+        
 
-        public IActionResult Submit(IFormCollection data)
+        public async Task<IActionResult> Submit(IFormCollection data)
         {
             Console.WriteLine("Submit");
             ViewBag.Name = data["Name"];
             ViewBag.Country = data["Country"];
             string name = data["Name"].ToString();
             string country = data["Country"].ToString();
-            var database = client.GetDatabase("users");
-            var table = database.GetCollection<BsonDocument>("user_country");
-            var user_identity = new BsonDocument
+            /*var database = client.GetDatabase("users");
+            var table = database.GetCollection<BsonDocument>("user_country");*/
+            var userIdentity = new BsonDocument
             {
                 {"Name", name},
                 {"Country",country}
             };
-            table.InsertOne(user_identity);
+            await _userService.Create(userIdentity);
+            //table.InsertOne(user_identity);
             return View("Index");
         }
         public IActionResult Index()
@@ -40,15 +43,18 @@ namespace WebApplication2.Controllers
         }
 
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Privacy()
         {
-            var database = client.GetDatabase("users");
-            var table = database.GetCollection<BsonDocument>("user_country");
+            /*var database = client.GetDatabase("users");
+            var table = database.GetCollection<BsonDocument>("user_country");*//*
+
             var list_of_users = table.Find(new BsonDocument()).ToList();
-            //var docs = table.Find(new BS).ToList();
+            //var docs = table.Find(new BS).ToList();*/
+
+            var listOfUsers = await _userService.Get(); 
             BsonDocument t = new BsonDocument();
             List<UserData> termsList = new List<UserData>();
-            list_of_users.ForEach(doc =>
+            listOfUsers.ForEach(doc =>
             {
                 Console.WriteLine(doc);
                 t = doc;

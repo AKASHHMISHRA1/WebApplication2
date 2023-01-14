@@ -6,7 +6,7 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
-<h3><b>HTTPPost Method</b></h3>
+<h3><b>Enter Your Details:</b></h3>
 @using (Html.BeginForm("Submit", "Home", FormMethod.Post))
 {
     <table>
@@ -24,6 +24,6 @@
     </table>
 }
 <h4 style="color:purple">
-    ID: @ViewBag.Name<br />
-    Name: @ViewBag.Country<br />
+    Name: @ViewBag.Name<br />
+    Country: @ViewBag.Country<br />
 </h4>
