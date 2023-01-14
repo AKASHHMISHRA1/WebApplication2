@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Privacy Policy";
+    var user = ViewData.Model;
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Use this page to detail your site's privacy policy.</p>
+@{
+    int cnt = 1;
+    foreach(UserData item in user){
+        <p>@item.Name @item.Country</p>
+        <button id=@cnt value=@item.Country onClick=GFG_click(this.value)>@item.Name</button>
+        cnt = cnt + 1;
+    }
+    
+}
+@section scripts{
+    <script>
+        alert("Hi Privacy");
+        function GFG_click(clicked){
+            alert(clicked);
+        }
+    </script>
+}
+
+
